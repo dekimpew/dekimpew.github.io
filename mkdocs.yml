@@ -1,0 +1,15 @@
+site_name: dekimpew docs
+theme: 
+  name: material
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - toc.integrate
+    - navigation.top
+    - content.tabs.link
+    - content.code.annotation
+    - content.code.copy
+  language: en
+nav:
+- Home: index.md
+- Homelab: homelab/index.md
