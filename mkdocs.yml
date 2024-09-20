@@ -1,6 +1,17 @@
 site_name: dekimpew docs
 theme: 
   name: material
+  palette:
+    - scheme: default
+      primary: cyan
+      toggle:
+        icon: material/brightness-7 
+        name: Switch to dark mode
+    - scheme: slate
+      primary: cyan
+      toggle:
+        icon: material/brightness-4
+        name: Switch to dark mode
   features:
     - navigation.tabs
     - navigation.sections
@@ -10,6 +21,22 @@ theme:
     - content.code.annotation
     - content.code.copy
   language: en
+
+markdown_extensions:
+  - def_list
+  - sane_lists
+  - pymdownx.tasklist:
+      custom_checkbox: true
+
 nav:
 - Home: index.md
-- Homelab: homelab/index.md
+- Homelab: 
+  - Setup: homelab/index.md
+  - Topology: homelab/topology.md
+- Tanzu: 
+  - Introduction: tanzu/index.md
+  - WCP with NSX: tanzu/nsx_for_wcp.md
+- Kubernetes: 
+  - Introduction: k8s/index.md
+  - Custom HPA metrics: k8s/custom_hpa.md
+  #- AVI with kubeadm: k8s/avi_with_k8s.md
