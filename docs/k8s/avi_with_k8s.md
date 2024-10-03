@@ -38,8 +38,7 @@ Go back and edit your Cloud. In the IPAM section, select your newly created IPAM
 
 ## Deploying the SE's
 The previous steps were all pretty easy. Now comes the hard part: deploying Service Engines onto Proxmox.  
-To deploy the SE's, you can either use the ansible role or pure API calls. In this case, I've used the Ansible role in combination with some manual steps.
-
+To deploy the SE's, I have taken the official AVI ansible role and edited it to be used with Proxmox.
 
 ## Deploying AKO on the kubeadm cluster
 

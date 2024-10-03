@@ -11,4 +11,4 @@ This runtime is known under many names:
 - vSphere with Tanzu  
 - vSphere IAAS Control Plane  
 
-I know, we're not making it sound sexy right? vIAASCP rolls right off the tongue. I will try to be consistent and will probably use the __WCP__ acronym across all documents.
+I know, we're not making it sound sexy right? vIAASCP rolls right off the tongue. I will try to be consistent and will probably use the __WCP__ acronym across all documents unless we come up with a better name.
