@@ -20,9 +20,9 @@ Enabling an external OIDC provider also allows you to create a kubeconfig that c
 ### Configuring the supervisor
 1. Back in the vSphere UI, create a new identity provider.
 2. fill in the following provider configuration:
-    2.1. Issuer URL: this is the Gitlab fqdn.
-    2.2. Username claim: nickname
-    2.3. Group claim: groups
+    1. Issuer URL: this is the Gitlab fqdn.
+    2. Username claim: nickname
+    3. Group claim: groups
 3. Next, fill in the user id and secret.
 4. In additional settings, you __must__ fill in openid in "Additional Scopes". Otherwise pinniped will automatically request the offline_access scope which does not exist in gitlab.
 5. If your gitlab instance is signed by a private CA, add the CA certificate.
