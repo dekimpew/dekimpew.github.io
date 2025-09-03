@@ -1,10 +1,12 @@
-# End-to-end: Using Gitlab as an external OIDC for WCP
-This guide is an end-to-end walkthrough for setting up Gitlab external OIDC access to WCP guest clusters.
+# End-to-end: Using Gitlab as an external OIDC for vSphere Supervisor
+This guide is an end-to-end walkthrough for setting up Gitlab external OIDC access to VKS clusters.  
+The guide has been written for vSphere 8 and has not been tested against VCF/VVF 9. The process will probably not change drastically but small differences may occur.
+
 ## Why?
-When you deploy workload clusters in your organization, you want to control who gets to do what on which cluster. RBAC is essential and WCP offers two options out of the box:
+When you deploy workload clusters in your organization, you want to control who gets to do what on which cluster. RBAC is essential and vSpher eSupervisor offers two options out of the box:
 
 1. vSphere SSO - This leverages the vSphere SSO configuration.  
-2. External OIDC - This allows you to connect and external OIDC provider directly to the supervisor and workload clusters.
+2. External OIDC - This allows you to connect and external OIDC provider directly to the supervisor and VKS clusters.
 
 In this guide, we are going to use Gitlab as an external OIDC provider to authenticate users.
 Enabling an external OIDC provider also allows you to create a kubeconfig that can be shared among developers, since there are no credentials stored in the kubeconfig file. All authentication is done through pinniped.
@@ -13,9 +15,9 @@ Enabling an external OIDC provider also allows you to create a kubeconfig that c
 
 ### Setting up Gitlab
 1. In the Gitlab admin area, go to the application page and create a new application.
-2. Grab the redirect URL from the supervisor (Configure -> Identity Providers in the vsphere WCP UI)
+2. Grab the redirect URL from the supervisor (Configure -> Identity Providers in the vsphere Supervisor UI)
 3. Select Trusted and Confidential. Under scopes, select openid, profile and email.
-4. Temporarily copy the user id and the secret. The secret can only be read now!
+4. Copy the user id and the secret. The secret can only be read now!
 
 ### Configuring the supervisor
 1. Back in the vSphere UI, create a new identity provider.
@@ -45,7 +47,7 @@ oidc-idp   https://git.dklab.be   Ready    20h
 ### Setting up the Tanzu cli and generating the kubeconfig file
 The next step is to generate a kubeconfig that leverages pinniped to connect to Gitlab.
 
-1. Check the correct version to download from this [Compatibility matrix](https://docs.vmware.com/en/VMware-Tanzu-CLI/index.html#compatibility-with-vmware-tanzu-products-1)
+1. Check the correct version to download from this [Compatibility matrix](https://techdocs.broadcom.com/us/en/vmware-tanzu/standalone-components/tanzu-cli/1-5/cli/release-notes-core-cli.html) at the bottom of the page. For vSphere Supervisor and VKS, this is version __1.1.0__.
 2. Once you've installed the tanzu binary, install the basic TKG group:
 ```
 tanzu plugin install --group vmware-tkg/default
@@ -73,7 +75,7 @@ See the flowchart and explanation [here](rbac_on_wcp.md)
 As a developer, there are less steps to execute to be able to connect to the workload cluster.
 
 ### Downloading and configuring the Tanzu cli
-You can follow the same matrix as in the previous chapter to determine what Tanzu cli version you require: [Compatibility matrix](https://docs.vmware.com/en/VMware-Tanzu-CLI/index.html#compatibility-with-vmware-tanzu-products-1)
+You can follow the same matrix as in the previous chapter to determine what Tanzu cli version you require. As mentioned above, for vSphere Supervisor on vSphere 8 this means version __1.1.0__.
 
 1. Install the correct Tanzu cli version.
 2. Install the basic TKG group (this contains the required pinniped plugin)
@@ -82,5 +84,5 @@ tanzu plugin install --group vmware-tkg/default
 ```
 
 ### Using the generated kubeconfig
-As a part of the Administrator workflow, you as a developer or user should have received a kubeconfig file.  
-You can now use the kubeconfig file as usual with kubectl. On first use, a browser window will open requiring you to log into Gitlab. Once logged in you can now 
+As a part of the Administrator workflow, you as a developer or user should have received a kubeconfig file from a platform administrator.  
+You can now use the kubeconfig file as usual with kubectl. On first use, a browser window will open requiring you to log into Gitlab. Once logged in you can manage your resources according to what's allowed in the assigned RoleBinding or ClusterRoleBinding.
