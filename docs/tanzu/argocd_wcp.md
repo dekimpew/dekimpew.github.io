@@ -1,4 +1,4 @@
-# Deploying WCP workload clusters with ArgoCD
+# Deploying VKS workload clusters with ArgoCD
 With the addition of ArgoCD as a supervisor service, we can now easily deploy argoCD instances in vSphere namespaces and manage objects within these namespaces.  
 One of the interesting things you can do is manage your workload cluster state with argoCD.  
 

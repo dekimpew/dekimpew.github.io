@@ -33,12 +33,12 @@ nav:
 - Homelab: 
   - Setup: homelab/index.md
   - Topology: homelab/topology.md
-- Tanzu: 
+- vSphere Supervisor: 
   - Introduction: tanzu/index.md
   #- WCP with NSX: tanzu/nsx_for_wcp.md
-  - External OIDC on WCP: tanzu/wcp_oidc.md
-  - RBAC options on WCP: tanzu/rbac_on_wcp.md
-  - Issues with WCP: tanzu/wcp_issues.md
+  - External OIDC on Supervisor: tanzu/wcp_oidc.md
+  - RBAC options on Supervisor: tanzu/rbac_on_wcp.md
+  - Issues with Supervisor: tanzu/wcp_issues.md
 - Kubernetes: 
   - Introduction: k8s/index.md
   - Custom HPA metrics: k8s/custom_hpa.md

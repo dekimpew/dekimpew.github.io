@@ -1,5 +1,5 @@
-# WCP issues
-This page is meant as a high lvl KB for issues I've encountered with WCP.
+# Supervisor issues
+This page is meant as a high lvl KB for issues I've encountered with Supervisor.
 
 ## Cleanup
 ### Unable to remove NSX bits due to expired NSX password
