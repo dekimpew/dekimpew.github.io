@@ -16,4 +16,4 @@ Depending on what authentication method you use and the required permissions on 
 
 Below is a flowchart that guides you through the permissions and where to set them.
 
-![rbac flowchart](img/wcp_rbac_v4.png)
+![rbac flowchart](img/wcp_rbac_v5.png)
