@@ -1,8 +1,6 @@
 # Explaining RBAC on vSphere Supervisor and VKS guest clusters
 
-vSphere Supervisor uses a concept of vSphere namespaces to organize workloads on the WCP control plane.  
-vSphere namespaces can be seen as a combination of vSphere resource pools and kubernetes namespaces. 
-
+vSphere Supervisor uses a concept of vSphere namespaces for tenancy which can be seen as a combination of vSphere resource pools and kubernetes namespaces. 
 Part of the featureset of a vSphere namespace is to assign permissions to users and groups. These users can be authenticated against either the vSphere SSO or an external OIDC provider.
 
 ## vSphere namespace permissions
@@ -16,4 +14,4 @@ Depending on what authentication method you use and the required permissions on 
 
 Below is a flowchart that guides you through the permissions and where to set them.
 
-![rbac flowchart](img/wcp_rbac_v5.png)
+![rbac flowchart](img/wcp_rbac_v6.png)
