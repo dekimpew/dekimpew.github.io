@@ -1,0 +1,1009 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../">
+      
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.22">
+    
+    
+      
+        <title>Custom HPA metrics - dekimpew docs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.84d31ad4.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="cyan" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#scaling-applications-with-horizontalpodautoscaling-and-custom-metrics" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="dekimpew docs" class="md-header__button md-logo" aria-label="dekimpew docs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            dekimpew docs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Custom HPA metrics
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="cyan" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="cyan" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../homelab/" class="md-tabs__link">
+          
+  
+  
+  Homelab
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../tanzu/" class="md-tabs__link">
+          
+  
+  
+  vSphere Supervisor
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
+          
+  
+  
+  Kubernetes
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="dekimpew docs" class="md-nav__button md-logo" aria-label="dekimpew docs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    dekimpew docs
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Home
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Homelab
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Homelab
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../homelab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Setup
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../homelab/topology/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Topology
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    vSphere Supervisor
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            vSphere Supervisor
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tanzu/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Introduction
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tanzu/wcp_oidc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    External OIDC on Supervisor
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tanzu/rbac_on_wcp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    RBAC options on Supervisor
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tanzu/wcp_issues/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Issues with Supervisor
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    Kubernetes
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Kubernetes
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Introduction
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Custom HPA metrics
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    Custom HPA metrics
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#goal" class="md-nav__link">
+    <span class="md-ellipsis">
+      Goal
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#requirements" class="md-nav__link">
+    <span class="md-ellipsis">
+      Requirements
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#procedure" class="md-nav__link">
+    <span class="md-ellipsis">
+      Procedure
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Procedure">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#demo-application-nginx" class="md-nav__link">
+    <span class="md-ellipsis">
+      Demo application: Nginx
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#configuring-horizontalpodautoscaling" class="md-nav__link">
+    <span class="md-ellipsis">
+      Configuring HorizontalPodAutoscaling
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#addendums" class="md-nav__link">
+    <span class="md-ellipsis">
+      Addendums
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Addendums">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#installing-prometheus-adapter" class="md-nav__link">
+    <span class="md-ellipsis">
+      Installing Prometheus-adapter
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#list-available-custom-metrics" class="md-nav__link">
+    <span class="md-ellipsis">
+      List Available custom metrics
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#understanding-the-current-and-target-metrics" class="md-nav__link">
+    <span class="md-ellipsis">
+      Understanding the current and target metrics
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="scaling-applications-with-horizontalpodautoscaling-and-custom-metrics">Scaling applications with HorizontalPodAutoscaling and custom metrics</h1>
+<h2 id="goal">Goal</h2>
+<p>Being able to scale an application based on specific non cpu/memory metrics provided by the application.</p>
+<h2 id="requirements">Requirements</h2>
+<ul>
+<li>A running k8s cluster (duh).</li>
+<li>Prometheus operator running in the same cluster.</li>
+<li>Prometheus-adapter deployed. See addendum for deployment steps.</li>
+<li>Contour Ingress Controller (if you want to use the HTTPProxy in the example, otherwise swap it out for a normal ingress on a controller of your choice.)</li>
+<li>An application that exposes application-specific metrics. In our example we will use a simple NGINX deployment with nginx-prometheus-exporter but any application that exposes prometheus compatible metrics will do.</li>
+</ul>
+<h2 id="procedure">Procedure</h2>
+<h3 id="demo-application-nginx">Demo application: Nginx</h3>
+<p>First, we will need to use an application that exposes custom metrics. In this example, we'll use a basic nginx webapp and expose the nginx stats.<br />
+The nginx deployment uses the <code>nginx-prometheus-exporter</code> sidecar to expose nginx metrics in Prometheus format that can easily be scraped by Prometheus.</p>
+<ol>
+<li>Deploy the <a href="../resources/nginx.yaml">nginx yaml</a> example file.<br />
+<code>kubectl apply -f nginx.yaml</code></li>
+<li>
+<p>Once the nginx pods are up, you can validate the prometheus metrics by port-forwarding the service on the metrics port. <br />
+<code>kubectl port-forward svc/nginx 9113</code>  </p>
+</li>
+<li>
+<p>Point your browser to <code>http://127.0.0.1:9113/metrics</code> to see the available metrics.</p>
+</li>
+<li>Deploy the <a href="../resources/nginx-servicemonitor.yaml">ServiceMonitor yaml</a>.<br />
+    This instructs Prometheus to scrape the nginx service for metrics.<br />
+<code>kubectl apply -f nginx-servicemonitor.yaml</code><br />
+    The ServiceMonitor references the nginx service which exposes metrics on port 9113.</li>
+<li>Verify that you can see the target marked <strong>UP</strong> in your Prometheus UI.
+    <img alt="Prometheus Targets" src="../img/custom_hpa/prom-metrics.png" /></li>
+<li>
+<p>Next up we'll verify that we can see our custom metrics for our pods.<br />
+<code>kubectl get --raw "/apis/custom.metrics.k8s.io/v1beta1"/namespaces/nginx/</code>  </p>
+<p>The output should look like this: </p>
+</li>
+</ol>
+<pre><code class="language-json">{
+&quot;kind&quot;: &quot;MetricValueList&quot;,
+&quot;apiVersion&quot;: &quot;custom.metrics.k8s.io/v1beta1&quot;,
+&quot;metadata&quot;: {},
+&quot;items&quot;: [
+    {
+    &quot;describedObject&quot;: {
+        &quot;kind&quot;: &quot;Pod&quot;,
+        &quot;namespace&quot;: &quot;nginx&quot;,
+        &quot;name&quot;: &quot;nginx-6c855c5c77-p7jk6&quot;,
+        &quot;apiVersion&quot;: &quot;/v1&quot;
+    },
+    &quot;metricName&quot;: &quot;nginx_connections_active&quot;,
+    &quot;timestamp&quot;: &quot;2024-02-16T09:05:23Z&quot;,
+    &quot;value&quot;: &quot;1&quot;,
+    &quot;selector&quot;: null
+    },
+    {
+    &quot;describedObject&quot;: {
+        &quot;kind&quot;: &quot;Pod&quot;,
+        &quot;namespace&quot;: &quot;nginx&quot;,
+        &quot;name&quot;: &quot;nginx-6c855c5c77-z5jwq&quot;,
+        &quot;apiVersion&quot;: &quot;/v1&quot;
+    },
+    &quot;metricName&quot;: &quot;nginx_connections_active&quot;,
+    &quot;timestamp&quot;: &quot;2024-02-16T09:05:23Z&quot;,
+    &quot;value&quot;: &quot;1&quot;,
+    &quot;selector&quot;: null
+    }
+]
+}
+</code></pre>
+<h3 id="configuring-horizontalpodautoscaling">Configuring HorizontalPodAutoscaling</h3>
+<p>Now that our application is up and running and we have verified that our metrics are visible, we can configure HPA to use these metrics.<br />
+The API reference for the HPA object are <a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.28/#horizontalpodautoscaler-v2-autoscaling">here on the kubernetes.io page</a>.</p>
+<ol>
+<li>
+<p>Deploy the example <a href="../resources/nginx-hpa.yaml">nginx-hpa.yaml</a> manifest. <br />
+<code>kubectl apply -f nginx-hpa.yaml</code></p>
+</li>
+<li>
+<p>Verify that the HPA is deployed succesfull with <code>kubectl get hpa</code><br />
+    output:  </p>
+</li>
+</ol>
+<pre><code>NAME    REFERENCE          TARGETS   MINPODS   MAXPODS   REPLICAS   AGE
+nginx   Deployment/nginx   1/100     2         10        2          19h
+</code></pre>
+<ol start="3">
+<li>Now the fun begins. Let's put some load on the nginx deployment. I use <code>plow</code> for this but any application that can stress test a webapp will do.<br />
+    In my example, I will be continuously sending 200 concurrent connections for 10 minutes.</li>
+<li>After a few seconds, we can already see the connection count rise on our two pods according to Prometheus,
+    <img alt="Prometheus Targets" src="../img/custom_hpa/prom-metrics-load.png" /></li>
+<li>The HPA will then kick in and will scale the deployment to satisfy the target.  </li>
+</ol>
+<pre><code>NAME    REFERENCE          TARGETS       MINPODS   MAXPODS   REPLICAS   AGE
+nginx   Deployment/nginx   105500m/100   2         10        8          19h
+</code></pre>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;HPA will contiuously re-evaluate the metrics and scale accordingly  </p>
+<pre><code>NAME    REFERENCE          TARGETS      MINPODS   MAXPODS   REPLICAS   AGE
+nginx   Deployment/nginx   73666m/100   2         10        6          20h
+</code></pre>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<em>See Addendum for an explanation on the numbers in the Targets column</em></p>
+<h2 id="addendums">Addendums</h2>
+<h3 id="installing-prometheus-adapter">Installing Prometheus-adapter</h3>
+<p>If you have not deployed the Prometheus adapter yet, deploy it through the helm chart:<br />
+1. Add the helm repo.<br />
+<code>helm repo add prometheus-community  https://prometheus-community.github.io/helm-charts</code><br />
+2. Deploy the prometheus-adapter chart.<br />
+<code>helm install prometheus-adapter prometheus-community/prometheus-adapter --set prometheus.url="http://prometheus-kube-prometheus-prometheus.prometheus.svc",prometheus.port="9090" --set rbac.create="true" --namespace prometheus</code></p>
+<p>You will need prometheus-adapter to expose prometheus metrics under the custom.metrics.k8s.io API.</p>
+<h3 id="list-available-custom-metrics">List Available custom metrics</h3>
+<p>Once the prometheus-adapter is installed, query the custom metrics API.<br />
+<code>kubectl get --raw "/apis/custom.metrics.k8s.io/</code></p>
+<p>This will provide you with a full list of metrics you can use in HPA to scale against.</p>
+<h3 id="understanding-the-current-and-target-metrics">Understanding the current and target metrics</h3>
+<p>You might be puzzled by the output of the Targets column at first. In our example above, you can see that the current metric looks high (<strong>105500m</strong>/100) but this is due to the way kubernetes shows values in <strong>quantity</strong>.<br />
+Quantity is explained here: https://kubernetes.io/docs/reference/kubernetes-api/common-definitions/quantity/  </p>
+<p>In the above output the m means milli, meaning you need to divide the number by 1000.<br />
+This results in a decimal value of 105,5 over the target of 100. </p>
+<p>Because the example HPA takes average values across the READY pods, the value might switch between being an integer and a float, which is why you will see the fixed-point representation of a number (105500m instead of 105,5) from time to time.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.sections", "toc.integrate", "navigation.top", "content.tabs.link", "content.code.annotation", "content.code.copy"], "search": "../../assets/javascripts/workers/search.973d3a69.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.f55a23d4.min.js"></script>
+      
+    
+  </body>
+</html>
