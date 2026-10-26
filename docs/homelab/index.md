@@ -6,7 +6,7 @@ _Nothing beats something to call your own, independent of clouds, vpn's or corpo
 ### vSphere lab servers
 | Comp | Whitebox 1 | Dell SFF 1 | Dell SFF 2 | 
 | --- | --- | --- | --- |
-| CPU | Intel Core i5 12500 | Intel Core i3-10100 | Intel Core i3-10100 |
+| CPU | Intel Core i7 12700K | Intel Core i3-10100 | Intel Core i3-10100 |
 | Motherboard | ASUS PRO B660M-C-D4-CSM | Dell Optiplex | Dell Optiplex |
 | Memory | 2x Crucial Pro 64GB 3200MT  | 2x 32GB DDR4 3200MT | 2x 32GB DDR4 3200MT |
 | OS disk | Crucial MX100 256GB | Western Digital Blue SN580 500 GB | Western Digital Blue SN580 500 GB |
@@ -43,19 +43,15 @@ _Nothing beats something to call your own, independent of clouds, vpn's or corpo
 | Enclosure | Norco 2U 8bay rackmount |
 
 ## Software
-My vSphere lab is currently set up as a three host vSphere cluster with the following software packages/versions.
+My vSphere lab is currently running a slimmed down VCF9.1 deployment. Due to hardware limitations, I am not running VCF Automation or vDefend advanced services.
+The core purpose of this lab is to mainly focus on Supervisor/VKS with AVI. Most of the use-cases and customer questions can be covered without using VCF Automation.
 
 | Software | Version |
 | --- | --- |
-| vSphere | 8U3 |
-| vCenter | 8U3p1 |
-| NSX | 4.2.0.1 |
-| AVI Loadbalancer | 22.1.7 |
+| VCF | 9.1.1 |
+| AVI Loadbalancer | 32.1.3 |
 
-My primary lab server is running Proxmox 8.4. I made the switch to proxmox a few months ago in an effort to reduce power usage to a minimum since this system is running 24/7.  
-vSphere is __not__ a power efficient Hypervisor since it doesn't really have to. 
-
-At the time of the switch, the Broadcom aquisition was in full transition and internal vSphere licenses were no longer available. Not willing to drop money on VMUG just yet, I decided to go with Proxmox.
+My primary lab server is running Proxmox. I made the switch to proxmox a few months ago in an effort to reduce power usage to a minimum since this system is running 24/7.  
 
 ## Networking
 All lab servers are connected with a single 1 GbE connection for management. The vSphere whitebox has one 10GB SFP+ DAC connection for data while the Proxmox build and Dell SFF's use a 2.5GbE link.

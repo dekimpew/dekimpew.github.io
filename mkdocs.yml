@@ -33,13 +33,12 @@ nav:
 - Homelab: 
   - Setup: homelab/index.md
   - Topology: homelab/topology.md
-- vSphere Supervisor: 
-  - Introduction: tanzu/index.md
-  #- WCP with NSX: tanzu/nsx_for_wcp.md
-  - External OIDC on Supervisor: tanzu/wcp_oidc.md
-  - RBAC options on Supervisor: tanzu/rbac_on_wcp.md
-  - Issues with Supervisor: tanzu/wcp_issues.md
+- VCF: 
+  - External OIDC on Supervisor: vcf/wcp_oidc.md
+  - RBAC options on Supervisor: vcf/rbac_on_wcp.md
+  - Issues with Supervisor: vcf/wcp_issues.md
+#- AVI:
+#  - Running AVI DNS in VCF9.1: avi/dns.md
 - Kubernetes: 
   - Introduction: k8s/index.md
   - Custom HPA metrics: k8s/custom_hpa.md
-  #- AVI with kubeadm: k8s/avi_with_k8s.md
